@@ -17,6 +17,7 @@ function addItem(event) {
   if (val === "") {
     showAlertAction(addItemsAction, "Please add grocery item");
   } else {
+    createItem(val);
     showSuccessAction(addItemsAction, `${val} added successfully to the list`);
   }
 }
@@ -32,6 +33,7 @@ function showSuccessAction(element, text) {
   }, 3000);
   input.value = "";
 }
+
 function showAlertAction(element, text) {
   // set class to success
   element.classList.add("alert");
@@ -44,27 +46,14 @@ function showAlertAction(element, text) {
   input.value = "";
 }
 
-/*
-function showAction(element, text, isOk) {
-  if (isOk) {
-    // set class to success
-    element.classList.add("success");
-    // set text
-    element.innerText = text;
-    // show it for 3 seconds
-    setTimeout(() => {
-      element.classList.remove("success");
-    }, 3000);
-  } else {
-    // set class to success
-    element.classList.add("alert");
-    // set text
-    element.innerText = text;
-    // show it for 3 seconds
-    setTimeout(() => {
-      element.classList.remove("alert");
-    }, 3000);
-  }
-  input.value = "";
+// add new grocery item
+function createItem(val) {
+  const groceryItem = document.createElement("div");
+  groceryItem.classList.add("grocery-item");
+  groceryItem.innerHTML = `
+    <h4 class="grocery-item__title">${val}</h4>
+    <a href="#" class="grocery-item__link">
+        <i class="far fa-trash-alt"></i>
+    </a>`;
+  list.appendChild(groceryItem);
 }
-*/
