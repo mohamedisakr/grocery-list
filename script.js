@@ -27,6 +27,18 @@ function addItem(event) {
   }
 }
 
+// add new grocery item
+function createItem(val) {
+  const groceryItem = document.createElement("div");
+  groceryItem.classList.add("grocery-item");
+  groceryItem.innerHTML = `
+    <h4 class="grocery-item__title">${val.toLowerCase()}</h4>
+    <a href="#" class="grocery-item__link">
+        <i class="far fa-trash-alt"></i>
+    </a>`;
+  list.appendChild(groceryItem);
+}
+
 // Dispaly list from local storage
 function displayGroceryList() {
   let groceryList = localStorage.getItem("groceryList")
@@ -69,8 +81,11 @@ function removeCurrentItem(event) {
     const groceryItem = event.target.parentElement.parentElement;
     list.removeChild(groceryItem);
     showSuccessAction(displayItemsAction, `${text} remove from list`);
+    removetItemFromStorage(text);
   }
 }
+let lst = ["Level", "up", "your", "coding", "skills"];
+lst = lst.filter(item => item !== "level");
 
 function showSuccessAction(element, text) {
   // set class to success
@@ -96,23 +111,21 @@ function showAlertAction(element, text) {
   input.value = "";
 }
 
-// add new grocery item
-function createItem(val) {
-  const groceryItem = document.createElement("div");
-  groceryItem.classList.add("grocery-item");
-  groceryItem.innerHTML = `
-    <h4 class="grocery-item__title">${val}</h4>
-    <a href="#" class="grocery-item__link">
-        <i class="far fa-trash-alt"></i>
-    </a>`;
-  list.appendChild(groceryItem);
-}
-
 // update local storage
 function updateStorage(val) {
   let groceryList = localStorage.getItem("groceryList")
     ? JSON.parse(localStorage.getItem("groceryList"))
     : [];
-  groceryList.push(val);
+  groceryList.push(val.toLowerCase());
+  localStorage.setItem("groceryList", JSON.stringify(groceryList));
+}
+
+function removetItemFromStorage(val) {
+  let groceryList = localStorage.getItem("groceryList")
+    ? JSON.parse(localStorage.getItem("groceryList"))
+    : [];
+  groceryList = groceryList.filter(
+    item => item.toLowerCase() !== val.toLowerCase()
+  );
   localStorage.setItem("groceryList", JSON.stringify(groceryList));
 }
