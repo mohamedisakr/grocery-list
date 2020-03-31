@@ -10,6 +10,8 @@ const clear = document.querySelector(".displayItems-clear");
 // event listeners
 submit.addEventListener("click", addItem);
 document.addEventListener("DOMContentLoaded", displayGroceryList);
+clear.addEventListener("click", clearAllItems);
+list.addEventListener("click", removeCurrentItem);
 
 // functions
 // Add new item
@@ -31,13 +33,42 @@ function displayGroceryList() {
     ? JSON.parse(localStorage.getItem("groceryList"))
     : [];
   if (groceryList.length === 0) {
-    // create p tage and added to list dom element
-    const paragraph = document.createElement("p");
-    paragraph.textContent = "No items. Please add one";
-    list.appendChild(paragraph);
+    showSuccessAction(displayItemsAction, "No items. Please add one");
   } else {
     // loop through each item and call createItem function for each item
     groceryList.forEach(item => createItem(item));
+  }
+}
+
+// clear all grocery list items
+function clearAllItems() {
+  localStorage.removeItem("groceryList");
+  const items = document.querySelectorAll(".grocery-item");
+  if (items.length > 0) {
+    showAlertAction(displayItemsAction, "All items deleted");
+    items.forEach(item => list.removeChild(item));
+  } else {
+    showSuccessAction(displayItemsAction, "No items. Please add one");
+  }
+}
+/*
+    <div class="grocery-item">
+      <h4 class="grocery-item__title">item</h4>
+      <a href="#" class="grocery-item__link">
+        <i class="far fa-trash-alt"></i>
+      </a>
+    </div> 
+*/
+function removeCurrentItem(event) {
+  event.preventDefault();
+  // console.log(event.target);
+  const link = event.target.parentElement;
+  if (link.classList.contains("grocery-item__link")) {
+    const text = link.previousElementSibling.innerHTML;
+    // console.log(text);
+    const groceryItem = event.target.parentElement.parentElement;
+    list.removeChild(groceryItem);
+    showSuccessAction(displayItemsAction, `${text} remove from list`);
   }
 }
 
